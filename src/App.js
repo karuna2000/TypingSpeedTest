@@ -1,24 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
+import Timer from "./components/Timer";
+import Paragraph from "./components/Paragraph";
+import TypingBox from "./components/TypingBox";
+import { GlobalContext} from "./context/globalContext";
+import "./App.css";
+import Result from "./components/Result";
+import {useContext } from "react";
+// import data from './data.json';
+
 
 function App() {
-  return (
+   const {finalEvaluation} = useContext(GlobalContext);
+  return ( 
+    
+   <>
+    {finalEvaluation && <Result/>}
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1 className="Project-Title">Typing Speed Test</h1>
+      
+      <section className="Container">
+      <Timer/>
+      <Paragraph/>
+      <TypingBox/>
+      </section>
+      
     </div>
+    </>
+    
   );
 }
 

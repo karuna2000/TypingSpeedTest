@@ -1,0 +1,16 @@
+.Paragraph{
+    border: 2px solid #fff;
+    width: 90%;
+    padding: 1rem;
+    margin: 1rem auto 0;
+    
+}
+
+.Paragraph-Wrapper{
+    color: #fff;
+    font-size: 1.5rem;
+    height: fit-content;
+    word-break: break-all;
+    width: 100%;
+
+}
