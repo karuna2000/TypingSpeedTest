@@ -6,24 +6,25 @@ const Paragraph = () => {
 
   const { paragraph, setEvaluation} = useContext(GlobalContext);
 
-  const words = paragraph.split(" ");
+  const words = paragraph.split("");
 
-  useEffect(() => {
+  useEffect(()=>{
+     const original_string_word_count = paragraph.split(' ').length;
     setEvaluation((prev) => {
       return {
         ...prev,
-        correct: words.length,
-        errors:0
+        correct: original_string_word_count,
       };
     });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [paragraph]);
+
+  },[paragraph])
+
 
   return (
     <section className="Paragraph">
       <p className="Paragraph-Wrapper">
         {words.map((word, index) => (
-          <span key={index} style={{ padding: "0.3rem" }}>
+          <span key={index}>
             {word}
           </span>
         ))}

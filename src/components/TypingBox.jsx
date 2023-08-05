@@ -5,8 +5,9 @@ import "./TypingBox.css";
 
 const TypingBox = () => {
   const [show, setShow] = useState(false);
-  const [currentWord, setCurrentWord] = useState("");
+  const [currentKeyCode, setcurrentKeyCode] = useState();
   const [isTypingStart, setTypingStart] = useState(true);
+  const textAreaRef = useRef();
 
   const {
     duration,
@@ -21,11 +22,12 @@ const TypingBox = () => {
   };
   let currentwordIndex = useRef(0);
   let interval = useRef();
-  const words = paragraph.trim().split(" ");
+  const words = paragraph.split("");
 
   const startWatch = () => {
     let TotalSeconds = duration.minutes * 60 + duration.seconds;
     setTypingStart((prev) => !prev);
+
     interval.current = setInterval(() => {
       if (TotalSeconds <= 0 || currentwordIndex.current > words.length - 1) {
         clearInterval(interval.current);
@@ -37,10 +39,28 @@ const TypingBox = () => {
             seconds: 0,
           };
         });
+
+        if (textAreaRef.current.value !== words.join("")) {
+          const originalString = words.join("").split(" ");
+          const inputString = textAreaRef.current.value.split(" ");
+
+          const incorrectWords = originalString.filter((word, index) => {
+            return word !== inputString[index];
+          });
+
+          setEvaluation((prev) => {
+            return {
+              ...prev,
+              errors: incorrectWords.length,
+            };
+          });
+        }
+
         setTypingStart((prev) => !prev);
         setFinalEvaluation((prev) => !prev);
-        setCurrentWord("");
+        textAreaRef.current.value = "";
         currentwordIndex.current = 0;
+
         return;
       }
       const remainingMinutes = Math.floor(TotalSeconds / 60);
@@ -57,42 +77,41 @@ const TypingBox = () => {
     }, 1000);
   };
 
-  const handleTextArea = (event) => {
-    setCurrentWord(event.target.value.trim());
-  };
-
-  const handleKeyDown = (event) => {
- 
-    if (event.keyCode === 32) {
-      checkCorrectNessOfWord();
+  const handleInput = (event) => {
+    if (currentKeyCode !== 8) {
+      checkCorrectNessOfWord(event.target.value);
     }
   };
 
-  const checkCorrectNessOfWord = () => {
+  const handleKeyDown = (event) => {
+    setcurrentKeyCode(event.keyCode);
+    if (event.keyCode === 8) {
+      currentwordIndex.current--;
+      const spanElements = document.querySelectorAll(".Paragraph-Wrapper span")[
+        currentwordIndex.current
+      ];
+      spanElements.classList.remove(
+        "Highlight-CorrectSpelled-Text",
+        "Highlight-IncorrectSpelled-Text"
+      );
+    }
+  };
+
+  const checkCorrectNessOfWord = (letter) => {
     const currentWordFromParagraph = words[currentwordIndex.current];
     const spanElements = document.querySelectorAll(".Paragraph-Wrapper span")[
       currentwordIndex.current
     ];
 
-    if (currentWordFromParagraph === currentWord) {
+    if (currentWordFromParagraph === letter[currentwordIndex.current]) {
       spanElements.classList.add("Highlight-CorrectSpelled-Text");
-      setCurrentWord("");
+
       currentwordIndex.current++;
     } else {
       spanElements.classList.add("Highlight-IncorrectSpelled-Text");
-      setCurrentWord("");
       currentwordIndex.current++;
-
-      setEvaluation((prev) => {
-        return {
-          ...prev,
-          errors: prev.errors + 1,
-        };
-      });
     }
   };
-
-
 
   return (
     <>
@@ -104,9 +123,9 @@ const TypingBox = () => {
             className="TextArea"
             rows={5}
             disabled={isTypingStart}
-            onChange={handleTextArea}
+            onInput={handleInput}
             onKeyDown={handleKeyDown}
-            value={currentWord}
+            ref={textAreaRef}
           />
         </div>
         <div className="Start-End-Button-Wrapper">
@@ -116,7 +135,11 @@ const TypingBox = () => {
           >
             Set Custom Text
           </button>
-          <button className="Trigger-Button" onClick={startWatch} disabled={duration.minutes>0 ? false:true}>
+          <button
+            className="Trigger-Button"
+            onClick={startWatch}
+            disabled={duration.minutes > 0 ? false : true}
+          >
             Start
           </button>
         </div>

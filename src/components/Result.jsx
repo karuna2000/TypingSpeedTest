@@ -32,7 +32,7 @@ const Result = () => {
     <div className="ResultModal">
       <div className="Result-Wrapper">
         <div className="Score-Card">
-          <p className="Score-Indicator">{evaluation.correct}</p>
+          <p className="Score-Indicator">{evaluation.correct-evaluation.errors}</p>
         </div>
         <div className="ResultModal-Input-Wrapper">
           <p>Total Words : {total_number_of_words}</p>
