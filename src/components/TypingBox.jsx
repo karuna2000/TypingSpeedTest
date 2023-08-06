@@ -41,6 +41,7 @@ const TypingBox = () => {
         });
 
         if (textAreaRef.current.value !== words.join("")) {
+
           const originalString = words.join("").split(" ");
           const inputString = textAreaRef.current.value.split(" ");
 
@@ -103,9 +104,12 @@ const TypingBox = () => {
       currentwordIndex.current
     ];
 
-    if (currentWordFromParagraph === letter[currentwordIndex.current]) {
-      spanElements.classList.add("Highlight-CorrectSpelled-Text");
+    if(/\s/.test(letter[currentwordIndex.current])){
+      currentwordIndex.current++;
+    }
 
+    else if (currentWordFromParagraph === letter[currentwordIndex.current]) {
+      spanElements.classList.add("Highlight-CorrectSpelled-Text");
       currentwordIndex.current++;
     } else {
       spanElements.classList.add("Highlight-IncorrectSpelled-Text");
