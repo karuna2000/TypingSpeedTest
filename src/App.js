@@ -5,7 +5,7 @@ import { GlobalContext} from "./context/globalContext";
 import "./App.css";
 import Result from "./components/Result";
 import {useContext } from "react";
-// import data from './data.json';
+
 
 
 function App() {
