@@ -15,7 +15,7 @@ function App() {
    <>
     {finalEvaluation && <Result/>}
     <div className="App">
-      <h1 className="Project-Title">Typing Speed Test</h1>
+      <h1 className="Project-Title">TypingSpeed</h1>
       
       <section className="Container">
       <Timer/>
